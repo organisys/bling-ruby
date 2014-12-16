@@ -7,7 +7,9 @@ Configuração
 Crie um arquivo em: config/initializers/bling.rb com o seguinte conteúdo:
 
 Bling.setup do |config|
+
   config.apikey = 'sua-chave-aqui'
+
 end
 
 
