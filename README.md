@@ -12,6 +12,11 @@ Bling.setup do |config|
 end
 ```
 
+Documentação
+=============
+
+Saiba mais em: http://www.rubydoc.info/github/organisys/bling-ruby/
+
 Contribuições
 =============
 
