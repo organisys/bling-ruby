@@ -15,12 +15,15 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # xml - Path para XML
 
       def salvar_nota_servico(attributes = {})
-        xml = attributes[:xml]
+        apikey = attributes[:apikey]
+        xml    = attributes[:xml]
 
-        full_data = self.send(:post, '/notaservico/json', { query: { apikey: Bling.apikey, xml: xml } } )
+        full_data = self.send(:post, '/notaservico/json', { query: { apikey: apikey, xml: xml } } )
         full_data["retorno"]["notasservico"]
       end
     end

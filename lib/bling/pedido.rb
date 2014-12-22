@@ -15,12 +15,15 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # xml - Path para XML
 
       def pedido(attributes = {})
+        apikey = attributes[:apikey]
         numero = attributes[:numero].to_s
 
-        full_data = self.send(:get, "/pedido/#{numero}/json", { query: { apikey: Bling.apikey } } )
+        full_data = self.send(:get, "/pedido/#{numero}/json", { query: { apikey: apikey } } )
         full_data["retorno"]["pedidos"]
       end
 
@@ -28,13 +31,16 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # page - parâmetro para paginação (opcional)
 
       def pedidos(attributes = {})
+        apikey      = attributes[:apikey]
         page_number = attributes[:page]
-        page = "/page=#{page_number}" if page_number
+        page        = "/page=#{page_number}" if page_number
 
-        full_data = self.send(:get, "/pedidos#{page}/json", { query: { apikey: Bling.apikey } } )
+        full_data = self.send(:get, "/pedidos#{page}/json", { query: { apikey: apikey } } )
         full_data["retorno"]["pedidos"]
       end
 
@@ -42,15 +48,18 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # xml - Path para XML
       #
       # gera_nfe - true/false (opcional)
 
       def salvar_pedido(attributes = {})
-        xml = attributes[:xml]
+        apikey    = attributes[:apikey]
+        xml       = attributes[:xml]
         gerar_nfe = attributes[:gerar_nfe].to_s
 
-        full_data = self.send(:post, "/pedido/json", { query: { apikey: Bling.apikey, xml: xml, gerarnfe: gerar_nfe } } )
+        full_data = self.send(:post, "/pedido/json", { query: { apikey: apikey, xml: xml, gerarnfe: gerar_nfe } } )
         full_data["retorno"]["pedidos"]
       end
     end

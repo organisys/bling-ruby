@@ -14,21 +14,26 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # numero - (opcional)
       #
       # serie - (opcional)
 
       def nota_fiscal(attributes = {})
+        apikey = attributes[:apikey]
         numero = attributes[:numero].to_s
         serie  = attributes[:serie].to_s
 
-        full_data = self.send(:get, "/notafiscal/#{numero}/#{serie}/json", { query: { apikey: Bling.apikey } } )
+        full_data = self.send(:get, "/notafiscal/#{numero}/#{serie}/json", { query: { apikey: apikey } } )
         full_data["retorno"]["notasfiscais"]
       end
 
       # Listagem de notas fiscais
       #
       # Parâmetros:
+      #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
       #
       # page - parâmetro para paginação (opcional)
       #
@@ -41,12 +46,12 @@ module Bling
       # situacao - veja em [http://bling.com.br/manuais.bling.php?p=manuais.api2#getNotasFiscais] as possíveis situações (opcional)
 
       def notas_fiscais(attributes = {})
+        apikey      = attributes[:apikey]
         page_number = attributes[:page]
-        page = "/page=#{page_number}" if page_number
+        page        = "/page=#{page_number}" if page_number
+        filters     = set_filters(attributes)
 
-        filters = set_filters(attributes)
-
-        full_data = self.send(:get, "/notasfiscais#{page}/json", { query: { apikey: Bling.apikey, filters: filters } } )
+        full_data = self.send(:get, "/notasfiscais#{page}/json", { query: { apikey: apikey, filters: filters } } )
 
         show_data(full_data["retorno"])
       end
@@ -55,18 +60,23 @@ module Bling
       #
       # Parâmetros:
       #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
+      #
       # xml - Path para XML
 
       def salvar_nota_fiscal(attributes = {})
-        xml = attributes[:xml]
+        apikey = attributes[:apikey]
+        xml    = attributes[:xml]
 
-        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: Bling.apikey, xml: xml } } )
+        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, xml: xml } } )
         full_data["retorno"]["notasfiscais"]
       end
 
       # Salva e retorna os dados de uma nota fiscal
       #
       # Parâmetros:
+      #
+      # apikey - API Key obrigatória para requisiçãoes na plataforma Bling
       #
       # number - número da nota fiscal
       #
@@ -75,11 +85,12 @@ module Bling
       # send_mail - true/false (opcional)
 
       def salvar_consultar_nota_fiscal(attributes = {})
+        apikey     = attributes[:apikey]
         number     = attributes[:number].to_s
         serie      = attributes[:serie].to_s
         send_email = attributes[:send_email]
 
-        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: Bling.apikey, number: number, serie: serie, sendEmail: send_email } } )
+        full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
         full_data["retorno"]["notasfiscais"]
       end
 

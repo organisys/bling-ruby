@@ -11,14 +11,6 @@ module Bling
   # URL padrão para requisições no servidor Bling
   API_URL = "https://bling.com.br/Api/v2"
 
-  # Variável que contém API Key
-  mattr_accessor :apikey
-
-  # Carrega arquivo de inicialização com configurações gerais
-  def self.setup
-    yield self
-  end
-
   def show_data(param)
     if param["erros"]
       if param["erros"]["cod"] == 14
