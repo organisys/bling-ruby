@@ -1,16 +1,7 @@
 bling-ruby
 ==========
 
-Configuração
-============
-
-Crie um arquivo em: config/initializers/bling.rb com o seguinte conteúdo:
-
-```
-Bling.setup do |config|
-  config.apikey = 'sua-chave-aqui'
-end
-```
+Gem de integração com a plataforma de emissão de nota fiscal Bling - http://bling.com.br
 
 Documentação
 =============
