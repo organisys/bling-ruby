@@ -10,18 +10,6 @@ module Bling
 
   # URL padrão para requisições no servidor Bling
   API_URL = "https://bling.com.br/Api/v2"
-
-  def show_data(param)
-    if param["erros"]
-      if param["erros"]["cod"] == 14
-        []
-      end
-    else
-      param
-    end
-  end
-
-  class MissingApiKeyError < StandardError; end
 end
 
 class Object

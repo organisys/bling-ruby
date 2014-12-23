@@ -4,6 +4,8 @@ require 'httparty'
 # Nota Serviço: Mantém notas de serviço
 
 module Bling
+  class BlingError < StandardError ; end
+
   class NotaServico
     include HTTParty
 
@@ -24,7 +26,14 @@ module Bling
         xml    = attributes[:xml]
 
         full_data = self.send(:post, '/notaservico/json', { query: { apikey: apikey, xml: xml } } )
-        full_data["retorno"]["notasservico"]
+        get_response(full_data["retorno"])
+      end
+
+      private
+
+      def get_response data
+        raise(BlingError, data["erros"]["erro"]) if data["erros"]
+        data["notasservico"]
       end
     end
   end

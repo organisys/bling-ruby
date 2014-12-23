@@ -4,6 +4,8 @@ require 'httparty'
 # Produto: Mantém produtos
 
 module Bling
+  class BlingError < StandardError ; end
+
   class Produto
     include HTTParty
 
@@ -25,7 +27,7 @@ module Bling
         xml    = attributes[:xml]
 
         full_data = self.send(:post, '/produto/json', { query: { apikey: apikey, xml: xml } } )
-        full_data["retorno"]["produtos"]
+        get_response(full_data["retorno"])
       end
 
       # Deleta um produto
@@ -41,7 +43,7 @@ module Bling
         codigo = attributes[:codigo].to_s
 
         full_data = self.send(:delete, "/produto/#{codigo}", { body: { apikey: apikey } } )
-        full_data["retorno"]["produtos"]["produto"]
+        get_response(full_data["retorno"])
       end
 
       # Busca por um produto
@@ -57,7 +59,7 @@ module Bling
         codigo = attributes[:codigo].to_s
 
         full_data = self.send(:get, "/produto/#{codigo}/json", { query: { apikey: apikey } } )
-        full_data["retorno"]["produtos"]
+        get_response(full_data["retorno"])
       end
 
       # Listagem de produtos
@@ -76,7 +78,7 @@ module Bling
         page        = "/page=#{page_number}" if page_number
 
         full_data = self.send(:get, "/produtos#{page}/json", { query: { apikey: apikey } } )
-        full_data["retorno"]["produtos"]
+        get_response(full_data["retorno"])
       end
 
       # Salva um produto
@@ -92,7 +94,14 @@ module Bling
         xml    = attributes[:xml]
 
         full_data = self.send(:post, '/produto/json', { query: { apikey: apikey, xml: xml } } )
-        full_data["retorno"]["produtos"]
+        get_response(full_data["retorno"])
+      end
+
+      private
+
+      def get_response data
+        raise(BlingError, data["erros"]["erro"]) if data["erros"]
+        data["produtos"]
       end
     end
   end

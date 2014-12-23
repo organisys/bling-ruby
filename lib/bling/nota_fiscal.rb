@@ -4,6 +4,8 @@ require 'httparty'
 # Nota Fiscal: Mantém notas fiscais
 
 module Bling
+  class BlingError < StandardError ; end
+
   class NotaFiscal
     include HTTParty
 
@@ -26,7 +28,7 @@ module Bling
         serie  = attributes[:serie].to_s
 
         full_data = self.send(:get, "/notafiscal/#{numero}/#{serie}/json", { query: { apikey: apikey } } )
-        full_data["retorno"]["notasfiscais"]
+        get_response(full_data["retorno"])
       end
 
       # Listagem de notas fiscais
@@ -52,8 +54,7 @@ module Bling
         filters     = set_filters(attributes)
 
         full_data = self.send(:get, "/notasfiscais#{page}/json", { query: { apikey: apikey, filters: filters } } )
-
-        show_data(full_data["retorno"])
+        get_response(full_data["retorno"])
       end
 
       # Salva uma nota fiscal
@@ -69,7 +70,7 @@ module Bling
         xml    = attributes[:xml]
 
         full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, xml: xml } } )
-        full_data["retorno"]["notasfiscais"]
+        get_response(full_data["retorno"])
       end
 
       # Salva e retorna os dados de uma nota fiscal
@@ -91,10 +92,15 @@ module Bling
         send_email = attributes[:send_email]
 
         full_data = self.send(:post, '/notafiscal/json', { query: { apikey: apikey, number: number, serie: serie, sendEmail: send_email } } )
-        full_data["retorno"]["notasfiscais"]
+        get_response(full_data["retorno"])
       end
 
       private
+
+      def get_response data
+        raise(BlingError, data["erros"]["erro"]) if data["erros"]
+        data["notasservico"]
+      end
 
       def set_filters attributes
         data_emissao_from = attributes[:data_emissao_from]
