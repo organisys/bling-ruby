@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'bling-ruby'
-  s.version       = '0.0.2'
+  s.version       = '0.0.3'
   s.date          = '2014-12-16'
   s.description   = "The smartest integration with Bling system"
   s.summary       = "The official Bling library"
