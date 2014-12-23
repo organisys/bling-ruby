@@ -4,6 +4,8 @@ require 'httparty'
 # Pedido: Mantém pedidos
 
 module Bling
+  class BlingError < StandardError ; end
+
   class Pedido
     include HTTParty
 
@@ -24,7 +26,7 @@ module Bling
         numero = attributes[:numero].to_s
 
         full_data = self.send(:get, "/pedido/#{numero}/json", { query: { apikey: apikey } } )
-        full_data["retorno"]["pedidos"]
+        get_response(full_data["retorno"])
       end
 
       # Lista pedidos do sistema
@@ -41,7 +43,7 @@ module Bling
         page        = "/page=#{page_number}" if page_number
 
         full_data = self.send(:get, "/pedidos#{page}/json", { query: { apikey: apikey } } )
-        full_data["retorno"]["pedidos"]
+        get_response(full_data["retorno"])
       end
 
       # Salva um pedido
@@ -60,7 +62,14 @@ module Bling
         gerar_nfe = attributes[:gerar_nfe].to_s
 
         full_data = self.send(:post, "/pedido/json", { query: { apikey: apikey, xml: xml, gerarnfe: gerar_nfe } } )
-        full_data["retorno"]["pedidos"]
+        get_response(full_data["retorno"])
+      end
+
+      private
+
+      def get_response data
+        raise(BlingError, data["erros"]["erro"]) if data["erros"]
+        data["pedidos"]
       end
     end
   end
