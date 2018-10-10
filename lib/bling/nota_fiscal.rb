@@ -99,7 +99,7 @@ module Bling
 
       def get_response data
         raise(BlingError, data["erros"]["erro"]) if data["erros"]
-        data["notasservico"]
+        data["notasfiscais"]
       end
 
       def set_filters attributes
